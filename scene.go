@@ -73,6 +73,7 @@ func (s *scene) restart() {
 	s.bird.y = windowHeight / 2
 	s.bird.dead = false
 	s.bird.speed = 0
+	s.bird.score = 0
 	s.pipes.pipes = initialPipes()
 }
 
@@ -111,7 +112,11 @@ func (s *scene) draw() error {
 		return fmt.Errorf("could not copy background: %v", err)
 	}
 
-	s.bird.draw(s.renderer)
+	err = s.bird.draw(s.renderer)
+	if err != nil {
+		return fmt.Errorf("could not draw bird: %v", err)
+	}
+
 	s.pipes.draw(s.renderer)
 
 	if s.bird.dead {

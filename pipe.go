@@ -61,6 +61,7 @@ type pipe struct {
 	width    int32
 	upHeight int32
 	gap      int32
+	scored   bool
 }
 
 func newPipe(x int32) *pipe {
@@ -79,11 +80,17 @@ func upHeight() int32 {
 func (p *pipe) update() {
 	p.x = windowWidth + minPipeDist
 	p.upHeight = upHeight()
+	p.scored = false
 }
 
 func (p *pipe) hits(b *bird) bool {
 	if b.x+b.w <= p.x || b.x >= p.x+p.width {
 		return false
+	}
+
+	if !p.scored {
+		b.score++
+		p.scored = true
 	}
 
 	return b.y <= p.upHeight || b.y+b.h >= p.upHeight+p.gap

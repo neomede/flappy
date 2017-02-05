@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"strconv"
 	"sync"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -15,6 +17,7 @@ type bird struct {
 	frames  []*sdl.Texture
 	frame   int
 	mu      sync.Mutex
+	score   int
 }
 
 func (b *bird) update() {
@@ -30,9 +33,19 @@ func (b *bird) update() {
 	b.frame = (b.frame + 1) % len(b.frames)
 }
 
-func (b *bird) draw(r *sdl.Renderer) {
+func (b *bird) draw(r *sdl.Renderer) error {
 	rect := &sdl.Rect{X: b.x, Y: b.y, W: b.w, H: b.h}
 	r.Copy(b.frames[b.frame], nil, rect)
+
+	rectScore := &sdl.Rect{X: windowWidth / 2, Y: 10 / 2, W: 50, H: 50}
+	color := sdl.Color{R: 255, G: 100, B: 0, A: 255}
+
+	err := drawText(r, strconv.Itoa(b.score), rectScore, color)
+	if err != nil {
+		return fmt.Errorf("could not draw score: %v", err)
+	}
+
+	return nil
 }
 
 func (b *bird) jump() {
