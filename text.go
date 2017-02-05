@@ -10,10 +10,16 @@ import (
 func drawTitle(r *sdl.Renderer) error {
 	r.Clear()
 
-	rect := &sdl.Rect{X: 10, Y: windowHeight / 4, W: windowWidth - 20, H: windowHeight / 2}
+	rectTitle := &sdl.Rect{X: 10, Y: windowHeight / 4, W: windowWidth - 20, H: windowHeight / 2}
+	rectPress := &sdl.Rect{X: windowWidth / 4, Y: windowHeight - (windowHeight / 4), W: windowWidth / 2, H: windowHeight / 6}
 	color := sdl.Color{R: 255, G: 100, B: 0, A: 255}
 
-	err := drawText(r, "Flappy Gopher", rect, color)
+	err := drawText(r, "Flappy Gopher", rectTitle, color)
+	if err != nil {
+		return fmt.Errorf("could not copy texture: %v", err)
+	}
+
+	err = drawText(r, "press any button to start", rectPress, color)
 	if err != nil {
 		return fmt.Errorf("could not copy texture: %v", err)
 	}

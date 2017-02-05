@@ -46,7 +46,17 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("could not draw title: %v", err)
 	}
-	sdl.Delay(5000)
+	sdl.Delay(2000)
+
+start:
+	for {
+		switch sdl.WaitEvent().(type) {
+		case *sdl.QuitEvent:
+			return nil
+		case *sdl.KeyUpEvent, *sdl.MouseButtonEvent:
+			break start
+		}
+	}
 
 	s, err := newScene(r, 10, 1)
 	if err != nil {
